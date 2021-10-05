@@ -10,7 +10,6 @@ type WasteDeposit struct {
 	ID          int `json:"id"`
 	WasteId     int `json:"wasteId"`
 	TotalHeight int `json:"totalHeight"`
-	//TotalMoney  int `json:"totalMoney"`
 }
 
 type Transaction struct {
@@ -21,6 +20,17 @@ type Transaction struct {
 	TotalMoney  int          `json:"totalMoney"`
 	DepositID   int          `json:"depositID"`
 	DataDeposit WasteDeposit `json:"dataDeposit"`
+}
+
+type TypeTransaction struct {
+	//ID   int    `json:"id"`
+	Name string `json:"name"`
+}
+
+func ToDomainTypeTrans(req TypeTransaction) *transaction.DomainType {
+	return &transaction.DomainType{
+		Name: req.Name,
+	}
 }
 
 func ToDomainDeposit(req WasteDeposit) *transaction.DomainDeposit {

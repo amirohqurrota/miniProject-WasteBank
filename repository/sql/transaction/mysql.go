@@ -1,6 +1,7 @@
 package transaction
 
 import (
+	"fmt"
 	_TransactionDomain "wastebank-ca/bussines/transaction"
 
 	"gorm.io/gorm"
@@ -25,6 +26,18 @@ func (repo *repoTransaction) NewDeposit(wasteDeposit *_TransactionDomain.DomainD
 	return recWasteDeposit, nil
 }
 
+func (repo *repoTransaction) AddNewType(typeTransaction *_TransactionDomain.DomainType) (*_TransactionDomain.DomainType, error) {
+	recType := fromDomainType(*typeTransaction)
+	fmt.Println("in repository")
+
+	if err := repo.DBConn.Save(&recType).Error; err != nil {
+		return &_TransactionDomain.DomainType{}, err
+	}
+	result := toDomainType(&recType)
+	fmt.Println(result.Name)
+	return &result, nil
+}
+
 func (repo *repoTransaction) Insert(trans *_TransactionDomain.DomainTransaction) (*_TransactionDomain.DomainTransaction, error) {
 	var idDeposit int
 	if trans.TypeID == 1 {
@@ -41,41 +54,41 @@ func (repo *repoTransaction) Insert(trans *_TransactionDomain.DomainTransaction)
 	return &result, nil
 }
 
-func (repo *repoTransaction) Update(waste *_TransactionDomain.DomainTransaction) (*_TransactionDomain.DomainTransaction, error) {
-	// 	recordWaste := fromDomain(*waste)
-	// 	//fmt.Println("id sql 1", waste.ID)
-	// 	if err := repo.DBConn.Where("Id=?", waste.ID).Updates(recordWaste).Error; err != nil {
-	// 		return &_TransactionDomain.Domain{}, err
-	// 	}
-	// 	//fmt.Println("id sql", recordWaste.ID)
-	// 	result := toDomain(&recordWaste)
-	// 	return &result, nil
-	return nil, nil
-}
+// func (repo *repoTransaction) Update(waste *_TransactionDomain.DomainTransaction) (*_TransactionDomain.DomainTransaction, error) {
+// 	// 	recordWaste := fromDomain(*waste)
+// 	// 	//fmt.Println("id sql 1", waste.ID)
+// 	// 	if err := repo.DBConn.Where("Id=?", waste.ID).Updates(recordWaste).Error; err != nil {
+// 	// 		return &_TransactionDomain.Domain{}, err
+// 	// 	}
+// 	// 	//fmt.Println("id sql", recordWaste.ID)
+// 	// 	result := toDomain(&recordWaste)
+// 	// 	return &result, nil
+// 	return nil, nil
+// }
 
-func (repo *repoTransaction) FindAll() (*[]_TransactionDomain.DomainTransaction, error) {
-	// 	recordWaste := []Waste{}
-	// 	if err := repo.DBConn.Find(&recordWaste).Error; err != nil {
-	// 		return &[]_TransactionDomain.DomainTransaction{}, err
-	// 	}
+// func (repo *repoTransaction) FindAll() (*[]_TransactionDomain.DomainTransaction, error) {
+// 	// 	recordWaste := []Waste{}
+// 	// 	if err := repo.DBConn.Find(&recordWaste).Error; err != nil {
+// 	// 		return &[]_TransactionDomain.DomainTransaction{}, err
+// 	// 	}
 
-	// 	wasteDomain := []_TransactionDomain.DomainTransaction{}
-	// 	for _, value := range recordWaste {
-	// 		wasteDomain = append(wasteDomain, toDomain(&value))
-	//}
+// 	// 	wasteDomain := []_TransactionDomain.DomainTransaction{}
+// 	// 	for _, value := range recordWaste {
+// 	// 		wasteDomain = append(wasteDomain, toDomain(&value))
+// 	//}
 
-	// 	//fmt.Println(len(wasteDomain))
+// 	// 	//fmt.Println(len(wasteDomain))
 
-	// 	return &wasteDomain, nil
-	return nil, nil
-}
+// 	// 	return &wasteDomain, nil
+// 	return nil, nil
+// }
 
-func (repo *repoTransaction) GetData(id int, name string) (*_TransactionDomain.DomainTransaction, error) {
-	// 	var recordWaste Waste
-	// 	if err := repo.DBConn.Where("name=? OR id=?", name, id).First(&recordWaste).Error; err != nil {
-	// 		return &_TransactionDomain.Domain{}, err
-	// 	}
-	// 	result := toDomain(&recordWaste)
-	// 	return &result, nil
-	return nil, nil
-}
+// func (repo *repoTransaction) GetData(id int, name string) (*_TransactionDomain.DomainTransaction, error) {
+// 	// 	var recordWaste Waste
+// 	// 	if err := repo.DBConn.Where("name=? OR id=?", name, id).First(&recordWaste).Error; err != nil {
+// 	// 		return &_TransactionDomain.Domain{}, err
+// 	// 	}
+// 	// 	result := toDomain(&recordWaste)
+// 	// 	return &result, nil
+// 	return nil, nil
+// }

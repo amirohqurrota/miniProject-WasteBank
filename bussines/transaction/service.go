@@ -1,5 +1,7 @@
 package transaction
 
+import "fmt"
+
 type serviceTransaction struct {
 	repository Repository
 }
@@ -25,6 +27,15 @@ func (servTransaction serviceTransaction) Append(transaction *DomainTransaction)
 	result, err := servTransaction.repository.Insert(transaction)
 	if err != nil {
 		return &DomainTransaction{}, err
+	}
+	return result, nil
+}
+
+func (servTransaction serviceTransaction) AddNewType(typeTransaction *DomainType) (*DomainType, error) {
+	fmt.Println("in serv")
+	result, err := servTransaction.repository.AddNewType(typeTransaction)
+	if err != nil {
+		return &DomainType{}, err
 	}
 	return result, nil
 }

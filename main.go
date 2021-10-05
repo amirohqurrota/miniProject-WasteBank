@@ -12,6 +12,10 @@ import (
 	"wastebank-ca/bussines/waste"
 	repoWaste "wastebank-ca/repository/sql/waste"
 
+	handlerTransaction "wastebank-ca/app/presenter/transaction"
+	"wastebank-ca/bussines/transaction"
+	repoTransaction "wastebank-ca/repository/sql/transaction"
+
 	"github.com/labstack/echo/v4"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -31,6 +35,9 @@ func initDB() *gorm.DB {
 		&repoUsers.User{},
 		&repoWaste.Waste{},
 		&repoWaste.WasteCategory{},
+		&repoTransaction.Transaction{},
+		&repoTransaction.WasteDeposit{},
+		&repoTransaction.TransactionType{},
 	)
 
 	return DB
@@ -49,10 +56,15 @@ func main() {
 	wasteServ := waste.NewService(wasteRepo)
 	wasteHandler := handlerWaste.NewHandler(wasteServ)
 
+	transactionRepo := repoTransaction.NewRepoMySQL(db)
+	transactionServ := transaction.NewService(transactionRepo)
+	transactionHandler := handlerTransaction.NewHandler(transactionServ)
+
 	// initial of routes
 	routesInit := routes.HandlerList{
-		UserHandler:  *usersHandler,
-		WasteHandler: *wasteHandler,
+		UserHandler:        *usersHandler,
+		WasteHandler:       *wasteHandler,
+		TransactionHandler: *transactionHandler,
 	}
 
 	routesInit.RouteRegister(e)

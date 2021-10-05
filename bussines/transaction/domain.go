@@ -27,6 +27,7 @@ type DomainTransaction struct {
 
 type Service interface {
 	Append(transaction *DomainTransaction) (*DomainTransaction, error)
+	AddNewType(typeTransaction *DomainType) (*DomainType, error)
 	//NewDeposit(deposit *DomainDeposit) (*DomainDeposit, error)
 	//Update(transaction *DomainTransaction) (*DomainTransaction, error)
 	//FindByID(id int) (*DomainTransaction, error)
@@ -34,6 +35,7 @@ type Service interface {
 
 type Repository interface {
 	Insert(transaction *DomainTransaction) (*DomainTransaction, error)
+	AddNewType(typeTransaction *DomainType) (*DomainType, error)
 	//NewDeposit(deposit *DomainDeposit) (*DomainDeposit, error)
 	//Update(transaction *DomainTransaction) (*DomainTransaction, error)
 	//FindByID(id int) (*DomainTransaction, error)

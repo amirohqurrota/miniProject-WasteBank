@@ -12,17 +12,16 @@ import (
 )
 
 type Transaction struct {
-	ID        int
-	UserID    int
-	User      _userRepo.User `gorm:"foreignKey:UserID"`
-	AdminID   int
-	TypeID    int
-	Type      TransactionType `gorm:"foreignKey:TypeID"`
-	Date      time.Time
-	DepositID int
-	Deposit   WasteDeposit `gorm:"foreignKey:DepositID"`
-	//DebitID    int
-	//Debit      _debitRepo.Debit `gorm:"foreignKey:DebitID"`
+	ID int
+	//gorm.Model
+	UserID     int
+	User       _userRepo.User `gorm:"foreignKey:UserID"`
+	AdminID    int
+	TypeID     int
+	Type       TransactionType `gorm:"foreignKey:TypeID"`
+	Date       time.Time
+	DepositID  int
+	Deposit    WasteDeposit `gorm:"foreignKey:DepositID"`
 	TotalMoney int
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
@@ -31,6 +30,20 @@ type Transaction struct {
 type TransactionType struct {
 	gorm.Model
 	Name string
+}
+
+func toDomainType(rec *TransactionType) transaction.DomainType {
+	return transaction.DomainType{
+		ID:   int(rec.ID),
+		Name: rec.Name,
+	}
+}
+
+func fromDomainType(domain transaction.DomainType) TransactionType {
+	return TransactionType{
+		//ID:   domain.ID,
+		Name: domain.Name,
+	}
 }
 
 type WasteDeposit struct {
@@ -55,25 +68,14 @@ func toDomain(rec *Transaction) transaction.DomainTransaction {
 	}
 }
 
-// func (rec *Waste) tooDomain() waste.DomainWaste {
-// 	return waste.DomainWaste{
-// 		ID:            int(rec.ID),
-// 		Name:          rec.Name,
-// 		CategoryId:    int(rec.CategoryId),
-// 		PurchasePrice: rec.PurchasePrice,
-// 		TotalStock:    rec.TotalStock,
-// 	}
-// }
-
 func fromDomain(domain transaction.DomainTransaction) Transaction {
 	return Transaction{
-		ID:        domain.ID,
-		UserID:    domain.UserID,
-		AdminID:   domain.AdminID,
-		TypeID:    domain.TypeID,
-		Date:      domain.Date,
-		DepositID: domain.DepositID,
-		//DebitID:    domain.DebitID,
+		ID:         domain.ID,
+		UserID:     domain.UserID,
+		AdminID:    domain.AdminID,
+		TypeID:     domain.TypeID,
+		Date:       domain.Date,
+		DepositID:  domain.DepositID,
 		TotalMoney: domain.TotalMoney,
 	}
 }

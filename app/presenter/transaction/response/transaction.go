@@ -43,3 +43,15 @@ func FromDomain(domain transaction.DomainTransaction) Transaction {
 		Date:       domain.Date,
 	}
 }
+
+type TypeTransaction struct {
+	ID   int    `json:"id"`
+	Name string `json:"name"`
+}
+
+func FromDomainType(domain transaction.DomainType) TypeTransaction {
+	return TypeTransaction{
+		ID:   domain.ID,
+		Name: domain.Name,
+	}
+}

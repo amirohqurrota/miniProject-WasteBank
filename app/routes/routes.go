@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"wastebank-ca/app/presenter/transaction"
 	"wastebank-ca/app/presenter/users"
 	"wastebank-ca/app/presenter/waste"
 
@@ -8,9 +9,9 @@ import (
 )
 
 type HandlerList struct {
-	UserHandler  users.Presenter
-	WasteHandler waste.Presenter
-	//WasteDepoHandler wasteDeposit.Presenter
+	UserHandler        users.Presenter
+	WasteHandler       waste.Presenter
+	TransactionHandler transaction.Presenter
 }
 
 func (handler *HandlerList) RouteRegister(e *echo.Echo) {
@@ -24,5 +25,9 @@ func (handler *HandlerList) RouteRegister(e *echo.Echo) {
 	waste.PUT("/update", handler.WasteHandler.Update)
 	waste.GET("/getAll", handler.WasteHandler.FindAll)
 	waste.GET("/getBy", handler.WasteHandler.GetData)
+
+	transaction := e.Group("transaction")
+	transaction.PUT("/add", handler.TransactionHandler.Insert)
+	transaction.POST("/NewType", handler.TransactionHandler.AddNewType)
 
 }
