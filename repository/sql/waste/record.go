@@ -8,7 +8,7 @@ import (
 )
 
 type Waste struct {
-	ID            int
+	ID            int `gorm:"primaryKey"`
 	Name          string
 	CategoryId    int
 	Category      WasteCategory `gorm:"foreignKey:CategoryId"`
@@ -32,16 +32,6 @@ func toDomain(rec *Waste) waste.DomainWaste {
 		TotalStock:    rec.TotalStock,
 	}
 }
-
-// func (rec *Waste) tooDomain() waste.DomainWaste {
-// 	return waste.DomainWaste{
-// 		ID:            int(rec.ID),
-// 		Name:          rec.Name,
-// 		CategoryId:    int(rec.CategoryId),
-// 		PurchasePrice: rec.PurchasePrice,
-// 		TotalStock:    rec.TotalStock,
-// 	}
-// }
 
 func fromDomain(domain waste.DomainWaste) Waste {
 	return Waste{

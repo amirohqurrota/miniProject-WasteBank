@@ -8,6 +8,10 @@ import (
 	"wastebank-ca/bussines/users"
 	repoUsers "wastebank-ca/repository/sql/users"
 
+	handlerAdmin "wastebank-ca/app/presenter/admin"
+	"wastebank-ca/bussines/admin"
+	repoAdmin "wastebank-ca/repository/sql/admin"
+
 	handlerWaste "wastebank-ca/app/presenter/waste"
 	"wastebank-ca/bussines/waste"
 	repoWaste "wastebank-ca/repository/sql/waste"
@@ -33,6 +37,7 @@ func initDB() *gorm.DB {
 
 	DB.AutoMigrate(
 		&repoUsers.User{},
+		&repoAdmin.Admin{},
 		&repoWaste.Waste{},
 		&repoWaste.WasteCategory{},
 		&repoTransaction.Transaction{},
@@ -52,12 +57,16 @@ func main() {
 	usersServ := users.NewService(usersRepo)
 	usersHandler := handlerUsers.NewHandler(usersServ)
 
+	adminRepo := repoAdmin.NewRepoMySQL(db)
+	adminServ := admin.NewService(adminRepo)
+	adminHandler := handlerAdmin.NewHandler(adminServ)
+
 	wasteRepo := repoWaste.NewRepoMySQL(db)
 	wasteServ := waste.NewService(wasteRepo)
 	wasteHandler := handlerWaste.NewHandler(wasteServ)
 
 	transactionRepo := repoTransaction.NewRepoMySQL(db)
-	transactionServ := transaction.NewService(transactionRepo)
+	transactionServ := transaction.NewService(transactionRepo, adminServ, usersServ)
 	transactionHandler := handlerTransaction.NewHandler(transactionServ)
 
 	// initial of routes
@@ -65,6 +74,7 @@ func main() {
 		UserHandler:        *usersHandler,
 		WasteHandler:       *wasteHandler,
 		TransactionHandler: *transactionHandler,
+		AdminHandler:       *adminHandler,
 	}
 
 	routesInit.RouteRegister(e)

@@ -1,38 +1,29 @@
 package request
 
+
 import (
 	"time"
-	"wastebank-ca/bussines/users"
+	"wastebank-ca/bussines/admin"
 )
 
-type UserInsert struct {
+type Admin struct {
 	ID         int    `json:"id"`
 	FirstName  string `json:"firstName"`
 	LastName   string `json:"lastName"`
 	Telephone  string `json:"telephone"`
 	Address    string `json:"address"`
-	TotalWaste int    `json:"totalWaste"`
-	TotalSaldo int    `json:"totalSaldo"`
+	TotalBonus int    `json:"totalBonus"`
 }
 
-func ToDomain(request UserInsert) *users.Domain {
-	return &users.Domain{
+func ToDomain(request Admin) *admin.Domain {
+	return &admin.Domain{
 		ID:         request.ID,
 		FirstName:  request.FirstName,
 		LastName:   request.LastName,
 		Telephone:  request.Telephone,
 		Address:    request.Address,
-		TotalWaste: request.TotalWaste,
-		TotalSaldo: request.TotalSaldo,
+		TotalBonus: request.TotalBonus,
 	}
-}
-
-type UserGetById struct {
-	ID        int    `json:"id"`
-	FirstName string `json:"firstName"`
-	LastName  string `json:"lastName"`
-	Telephone int    `json:"telephone"`
-	Address   string `json:"address"`
 }
 
 type DataUpdate struct {
@@ -40,8 +31,7 @@ type DataUpdate struct {
 	LastName   string
 	Telephone  string
 	Address    string
-	TotalWaste int
-	TotalSaldo int
+	TotalBonus int
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
 }
@@ -51,14 +41,13 @@ type UpdateRequest struct {
 	Data DataUpdate `json:"data"`
 }
 
-func UpdateToDomain(request UpdateRequest) *users.Domain {
-	return &users.Domain{
+func UpdateToDomain(request UpdateRequest) *admin.Domain {
+	return &admin.Domain{
 		ID:         request.ID,
 		FirstName:  request.Data.FirstName,
 		LastName:   request.Data.LastName,
 		Telephone:  request.Data.Telephone,
 		Address:    request.Data.Address,
-		TotalWaste: request.Data.TotalWaste,
-		TotalSaldo: request.Data.TotalSaldo,
+		TotalBonus: request.Data.TotalBonus,
 	}
 }

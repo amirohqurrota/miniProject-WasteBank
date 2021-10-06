@@ -11,6 +11,22 @@ type Deposit struct {
 	TotalHeight int `json:"totalHeight"`
 }
 
+func fromDomainDeposit(domain transaction.DomainDeposit) Deposit {
+	return Deposit{
+		ID:          domain.ID,
+		WasteId:     domain.WasteId,
+		TotalHeight: domain.TotalHeight,
+	}
+}
+
+func fromDomainAllDeposit(domain []transaction.DomainDeposit) []Deposit {
+	var result []Deposit
+	for _, element := range domain {
+		result = append(result, fromDomainDeposit(element))
+	}
+	return result
+}
+
 type Transaction struct {
 	ID          int       `json:"id"`
 	UserID      int       `json:"userId"`
@@ -19,11 +35,12 @@ type Transaction struct {
 	Date        time.Time `json:"date"`
 	TotalMoney  int       `json:"totalMoney"`
 	DepositID   int       `json:"depositID"`
-	DataDeposit Deposit   `json:"dataDeposit"`
+	DataDeposit []Deposit `json:"dataDeposit"`
 }
 
-func FromDomain(domain transaction.DomainTransaction) Transaction {
+func FromDomainTrans(domain transaction.DomainTransaction) Transaction {
 	if domain.TypeID == 1 {
+		//fmt.Println(domain.DepositData[0])
 		return Transaction{
 			TypeID:      domain.TypeID,
 			ID:          domain.ID,
@@ -31,7 +48,7 @@ func FromDomain(domain transaction.DomainTransaction) Transaction {
 			AdminID:     domain.AdminID,
 			TotalMoney:  domain.TotalMoney,
 			Date:        domain.Date,
-			DataDeposit: Deposit(domain.DepositData),
+			DataDeposit: fromDomainAllDeposit(domain.DepositData),
 		}
 	}
 	return Transaction{

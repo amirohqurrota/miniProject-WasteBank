@@ -22,7 +22,7 @@ type DomainTransaction struct {
 	Date        time.Time
 	TotalMoney  int
 	DepositID   int
-	DepositData DomainDeposit
+	DepositData []DomainDeposit
 }
 
 type Service interface {

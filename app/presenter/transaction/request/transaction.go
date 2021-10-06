@@ -13,13 +13,13 @@ type WasteDeposit struct {
 }
 
 type Transaction struct {
-	UserID      int          `json:"userId"`
-	AdminID     int          `json:"adminId"`
-	TypeID      int          `json:"typeId"`
-	Date        time.Time    `json:"date"`
-	TotalMoney  int          `json:"totalMoney"`
-	DepositID   int          `json:"depositID"`
-	DataDeposit WasteDeposit `json:"dataDeposit"`
+	UserID      int            `json:"userId"`
+	AdminID     int            `json:"adminId"`
+	TypeID      int            `json:"typeId"`
+	Date        time.Time      `json:"date"`
+	TotalMoney  int            `json:"totalMoney"`
+	DepositID   int            `json:"depositID"`
+	DataDeposit []WasteDeposit `json:"dataDeposit"`
 }
 
 type TypeTransaction struct {
@@ -41,13 +41,22 @@ func ToDomainDeposit(req WasteDeposit) *transaction.DomainDeposit {
 	}
 }
 
+func ToDomainDepositAll(req []WasteDeposit) *[]transaction.DomainDeposit {
+	var arrayDeposit []transaction.DomainDeposit
+	for _, n := range req {
+		arrayDeposit = append(arrayDeposit, *ToDomainDeposit(n))
+	}
+	return &arrayDeposit
+}
+
 func ToDomainTransaction(req Transaction) *transaction.DomainTransaction {
 	return &transaction.DomainTransaction{
-		TypeID:      req.TypeID,
+		UserID:      req.UserID,
 		AdminID:     req.AdminID,
+		TypeID:      req.TypeID,
 		Date:        req.Date,
 		TotalMoney:  req.TotalMoney,
 		DepositID:   req.DepositID,
-		DepositData: *ToDomainDeposit(req.DataDeposit),
+		DepositData: *ToDomainDepositAll(req.DataDeposit),
 	}
 }

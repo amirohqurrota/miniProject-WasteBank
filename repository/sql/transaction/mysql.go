@@ -18,53 +18,48 @@ func NewRepoMySQL(db *gorm.DB) _TransactionDomain.Repository {
 }
 
 func (repo *repoTransaction) NewDeposit(wasteDeposit *_TransactionDomain.DomainDeposit) (*_TransactionDomain.DomainDeposit, error) {
-	recWasteDeposit := wasteDeposit
+	recWasteDeposit := fromDomainDeposit(*wasteDeposit)
 
 	if err := repo.DBConn.Save(&recWasteDeposit).Error; err != nil {
 		return &_TransactionDomain.DomainDeposit{}, err
 	}
-	return recWasteDeposit, nil
+	fmt.Println("sql new deposit aman")
+	result := ToDomainDeposit(&recWasteDeposit)
+	return &result, nil
+}
+
+func (repo *repoTransaction) Insert(trans *_TransactionDomain.DomainTransaction) (*_TransactionDomain.DomainTransaction, error) {
+	//var idDeposit int
+	if trans.TypeID == 1 {
+		for n := range trans.DepositData {
+			data, _ := repo.NewDeposit(&trans.DepositData[n])
+			trans.DepositData[n].ID = data.ID
+			trans.DepositData[n].TotalHeight = data.TotalHeight
+			trans.DepositData[n].ID = data.ID
+			trans.DepositData[n].WasteId = data.WasteId
+		}
+	}
+
+	fmt.Println("--", trans.DepositData[0].TotalHeight)
+	recordTransaction := fromDomainTrans(*trans)
+	//fmt.Println(recordTransaction.AdminID, "in repository")
+	if err := repo.DBConn.Save(&recordTransaction).Error; err != nil {
+		return &_TransactionDomain.DomainTransaction{}, err
+	}
+	result := toDomainTrans(&recordTransaction)
+	return &result, nil
 }
 
 func (repo *repoTransaction) AddNewType(typeTransaction *_TransactionDomain.DomainType) (*_TransactionDomain.DomainType, error) {
 	recType := fromDomainType(*typeTransaction)
-	fmt.Println("in repository")
 
 	if err := repo.DBConn.Save(&recType).Error; err != nil {
 		return &_TransactionDomain.DomainType{}, err
 	}
 	result := toDomainType(&recType)
-	fmt.Println(result.Name)
+	//fmt.Println(result.Name)
 	return &result, nil
 }
-
-func (repo *repoTransaction) Insert(trans *_TransactionDomain.DomainTransaction) (*_TransactionDomain.DomainTransaction, error) {
-	var idDeposit int
-	if trans.TypeID == 1 {
-		data, _ := repo.NewDeposit(&trans.DepositData)
-		idDeposit = data.ID
-	}
-	trans.DepositID = idDeposit
-	recordTransation := fromDomain(*trans)
-
-	if err := repo.DBConn.Save(&recordTransation).Error; err != nil {
-		return &_TransactionDomain.DomainTransaction{}, err
-	}
-	result := toDomain(&recordTransation)
-	return &result, nil
-}
-
-// func (repo *repoTransaction) Update(waste *_TransactionDomain.DomainTransaction) (*_TransactionDomain.DomainTransaction, error) {
-// 	// 	recordWaste := fromDomain(*waste)
-// 	// 	//fmt.Println("id sql 1", waste.ID)
-// 	// 	if err := repo.DBConn.Where("Id=?", waste.ID).Updates(recordWaste).Error; err != nil {
-// 	// 		return &_TransactionDomain.Domain{}, err
-// 	// 	}
-// 	// 	//fmt.Println("id sql", recordWaste.ID)
-// 	// 	result := toDomain(&recordWaste)
-// 	// 	return &result, nil
-// 	return nil, nil
-// }
 
 // func (repo *repoTransaction) FindAll() (*[]_TransactionDomain.DomainTransaction, error) {
 // 	// 	recordWaste := []Waste{}

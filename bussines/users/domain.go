@@ -17,11 +17,15 @@ type Domain struct {
 type Service interface {
 	Append(user *Domain) (*Domain, error)
 	Update(user *Domain) (*Domain, error)
-	FindByID(id int) (*Domain, error)
+	UpdateSaldo(id int, saldo int) (*Domain, error)
+	//UpdateWaste(id int, waste int) (*Domain, error)
+	GetData(id int, name string) (*Domain, error)
 }
 
 type Repository interface {
 	Insert(user *Domain) (*Domain, error)
 	Update(user *Domain) (*Domain, error)
-	FindByID(id int) (*Domain, error)
+	UpdateSaldo(id int, saldo int) (*Domain, error)
+	//UpdateWaste(id int, waste int) (*Domain, error)
+	GetData(id int, name string) (*Domain, error)
 }
