@@ -23,7 +23,6 @@ func NewHandler(userServ users.Service) *Presenter {
 
 func (handler *Presenter) CreateToken(echoContext echo.Context) error {
 	var req users.Domain
-	//ctx := echoContext.Request().Context()
 	if err := echoContext.Bind(&req); err != nil {
 		return echoContext.JSON(http.StatusBadRequest, "something wrong in your request")
 	}
@@ -33,6 +32,7 @@ func (handler *Presenter) CreateToken(echoContext echo.Context) error {
 	if err != nil {
 		return err
 	}
+	//a, _ := auth.ParsingToken(token)
 	req.Username = username
 	return echoContext.JSON(http.StatusOK, response.FromDomainToken(token, req))
 }
@@ -75,6 +75,10 @@ func (handler *Presenter) GetData(echoContext echo.Context) error {
 	lastName := echoContext.QueryParam("lastName")
 	username := echoContext.QueryParam("username")
 	id, _ := strconv.Atoi(echoContext.QueryParam("id"))
+
+	// a := echoContext.Request().Header
+	// tokenString := a["Authorization"]
+	// fmt.Println(tokenString[0], "==")
 
 	resp, err := handler.serviceUser.GetData(id, firstName, lastName, username)
 	fmt.Println("handler user ", id)

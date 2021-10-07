@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt"
-	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
 
@@ -43,38 +42,45 @@ func (jwtConf *ConfigJWT) GenerateToken(roleID int, role string) string {
 	return token
 }
 
-// GetUser from jwt ...
-func GetUser(c echo.Context) *JwtCustomClaims {
-	user := c.Get("admin").(*jwt.Token)
-	claims := user.Claims.(*JwtCustomClaims)
-	return claims
+//parsing token string
+func ParsingToken(tokenString, role string) (jwt.MapClaims, error) {
+	claims := jwt.MapClaims{}
+	_, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
+		return []byte("secret!@#$%"), nil
+	})
+	if err != nil {
+		return jwt.MapClaims{}, err
+	}
+	return claims, nil
 }
 
-// func ParsingToken(tokenString string) (jwt.MapClaims, error) {
-// 	claims := jwt.MapClaims{}
-// 	token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
-// 		return []byte("<YOUR VERIFICATION KEY>"), nil
-// 	})
-// 	if err != nil {
-// 		return nil, errors.New("something wrong in your token request")
-// 	}
-// 	// decoded claims
-// 	for key, val := range claims {
-// 		fmt.Printf("Key: %v, value: %v\n", key, val)
-// 	}
-// 	fmt.Println("token : ", token.Header)
-// 	return claims, nil
+func RoleValidation(tokenString, role string) bool {
+	result, err := ParsingToken(tokenString, role)
+	if err != nil {
+		return false
+	}
+	roleLogin := result["role"]
+	return roleLogin == role
+}
+
+//cel
+
+// func GetUser(c echo.Context, role string) *JwtCustomClaims {
+// 	roleLogin := c.Get(role).(*jwt.Token)
+// 	claims := roleLogin.Claims.(*JwtCustomClaims)
+// 	return claims
 // }
 
-func RoleValidation(role string) echo.MiddlewareFunc {
-	return func(hf echo.HandlerFunc) echo.HandlerFunc {
-		return func(c echo.Context) error {
-			claims := GetUser(c)
-			if claims.Role == role {
-				return hf(c)
-			} else {
-				return echo.ErrBadRequest
-			}
-		}
-	}
-}
+// func RoleValidationCheck(roleLogin string) echo.MiddlewareFunc {
+// 	return func(hf echo.HandlerFunc) echo.HandlerFunc {
+// 		return func(c echo.Context) error {
+// 			claims := GetUser(c, roleLogin)
+
+// 			if claims.Role == roleLogin {
+// 				return hf(c)
+// 			} else {
+// 				return echo.ErrForbidden
+// 			}
+// 		}
+// 	}
+// }
