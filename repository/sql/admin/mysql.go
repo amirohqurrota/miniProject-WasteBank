@@ -38,10 +38,10 @@ func (repo *repoAdmin) Update(admin *_adminDomain.Domain) (*_adminDomain.Domain,
 	result := toDomain(resultResponse)
 	return &result, nil
 }
-func (repo *repoAdmin) GetData(id int, name string) (*_adminDomain.Domain, error) {
+func (repo *repoAdmin) GetData(id int, firstName string, lastName string, username string) (*_adminDomain.Domain, error) {
 	var recordAdmin Admin
 	fmt.Println("id mysql ", id)
-	if err := repo.DBConn.Where("first_name=? OR id=?", name, id).First(&recordAdmin).Error; err != nil {
+	if err := repo.DBConn.Where("id=? OR first_name=? OR last_name=? OR username=?", id, firstName, lastName, username).First(&recordAdmin).Error; err != nil {
 		return &_adminDomain.Domain{}, err
 	}
 

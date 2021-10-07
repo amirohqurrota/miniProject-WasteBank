@@ -3,7 +3,7 @@ package request
 import (
 	"time"
 	//_depositReq "wastebank-ca/app/presenter/wasteDeposit/request"
-	"wastebank-ca/bussines/transaction"
+	"wastebank-ca/bussines/transactions"
 )
 
 type WasteDeposit struct {
@@ -27,30 +27,30 @@ type TypeTransaction struct {
 	Name string `json:"name"`
 }
 
-func ToDomainTypeTrans(req TypeTransaction) *transaction.DomainType {
-	return &transaction.DomainType{
+func ToDomainTypeTrans(req TypeTransaction) *transactions.DomainType {
+	return &transactions.DomainType{
 		Name: req.Name,
 	}
 }
 
-func ToDomainDeposit(req WasteDeposit) *transaction.DomainDeposit {
-	return &transaction.DomainDeposit{
+func ToDomainDeposit(req WasteDeposit) *transactions.DomainDeposit {
+	return &transactions.DomainDeposit{
 		ID:          req.ID,
 		WasteId:     req.WasteId,
 		TotalHeight: req.TotalHeight,
 	}
 }
 
-func ToDomainDepositAll(req []WasteDeposit) *[]transaction.DomainDeposit {
-	var arrayDeposit []transaction.DomainDeposit
+func ToDomainDepositAll(req []WasteDeposit) *[]transactions.DomainDeposit {
+	var arrayDeposit []transactions.DomainDeposit
 	for _, n := range req {
 		arrayDeposit = append(arrayDeposit, *ToDomainDeposit(n))
 	}
 	return &arrayDeposit
 }
 
-func ToDomainTransaction(req Transaction) *transaction.DomainTransaction {
-	return &transaction.DomainTransaction{
+func ToDomainTransaction(req Transaction) *transactions.DomainTransaction {
+	return &transactions.DomainTransaction{
 		UserID:      req.UserID,
 		AdminID:     req.AdminID,
 		TypeID:      req.TypeID,

@@ -1,4 +1,4 @@
-package transaction
+package transactions
 
 import (
 	"fmt"
@@ -21,18 +21,20 @@ func NewService(repoTransaction Repository, adminService _adminDomain.Service, u
 }
 
 func (servTransaction serviceTransaction) Append(transaction *DomainTransaction) (*DomainTransaction, error) {
+	//fmt.Println("service id", transaction.UserID)
 	//update total saldo user
-	fmt.Println("service id", transaction.UserID)
+	if transaction.TypeID == 2 {
+		transaction.TotalMoney = -transaction.TotalMoney
+	}
+
 	_, updateError := servTransaction.userDomain.UpdateSaldo(transaction.UserID, transaction.TotalMoney)
 	if updateError != nil {
 		if updateError != nil {
-			fmt.Println("service error update")
 			return &DomainTransaction{}, updateError
 		}
 	}
-	fmt.Println("service update aman")
+	//fmt.Println("service update aman")
 	result, err := servTransaction.repository.Insert(transaction)
-	fmt.Println(result.AdminID, "trans")
 	if err != nil {
 		return &DomainTransaction{}, err
 	}

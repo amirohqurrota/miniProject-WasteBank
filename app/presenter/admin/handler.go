@@ -21,6 +21,22 @@ func NewHandler(adminServ admin.Service) *Presenter {
 	}
 }
 
+func (handler *Presenter) CreateToken(echoContext echo.Context) error {
+	var req admin.Domain
+	//ctx := echoContext.Request().Context()
+	if err := echoContext.Bind(&req); err != nil {
+		return echoContext.JSON(http.StatusBadRequest, "something wrong in your request")
+	}
+	username := req.Username
+	password := req.Password
+	token, err := handler.serviceAdmin.CreateToken(username, password)
+	if err != nil {
+		return err
+	}
+	req.Username = username
+	return echoContext.JSON(http.StatusOK, response.FromDomainToken(token, req))
+}
+
 func (handler *Presenter) Insert(echoContext echo.Context) error {
 	var req request.Admin
 	if err := echoContext.Bind(&req); err != nil {
@@ -56,11 +72,12 @@ func (handler *Presenter) GetData(echoContext echo.Context) error {
 	// 	return echoContext.JSON(http.StatusBadRequest, "something wrong in your request")
 	// }
 	fmt.Println("handler user checking")
+	username := echoContext.QueryParam("username")
 	firstName := echoContext.QueryParam("firstName")
-	//lastName := echoContext.QueryParam("lastName")
+	lastName := echoContext.QueryParam("lastName")
 	id, _ := strconv.Atoi(echoContext.QueryParam("id"))
 
-	resp, err := handler.serviceAdmin.GetData(id, firstName)
+	resp, err := handler.serviceAdmin.GetData(id, firstName, lastName, username)
 	fmt.Println("handler user ", id)
 	if err != nil {
 		return echoContext.JSON(http.StatusBadRequest, "not found")

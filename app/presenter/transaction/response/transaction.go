@@ -2,7 +2,7 @@ package response
 
 import (
 	"time"
-	"wastebank-ca/bussines/transaction"
+	"wastebank-ca/bussines/transactions"
 )
 
 type Deposit struct {
@@ -11,7 +11,7 @@ type Deposit struct {
 	TotalHeight int `json:"totalHeight"`
 }
 
-func fromDomainDeposit(domain transaction.DomainDeposit) Deposit {
+func fromDomainDeposit(domain transactions.DomainDeposit) Deposit {
 	return Deposit{
 		ID:          domain.ID,
 		WasteId:     domain.WasteId,
@@ -19,7 +19,7 @@ func fromDomainDeposit(domain transaction.DomainDeposit) Deposit {
 	}
 }
 
-func fromDomainAllDeposit(domain []transaction.DomainDeposit) []Deposit {
+func fromDomainAllDeposit(domain []transactions.DomainDeposit) []Deposit {
 	var result []Deposit
 	for _, element := range domain {
 		result = append(result, fromDomainDeposit(element))
@@ -38,7 +38,7 @@ type Transaction struct {
 	DataDeposit []Deposit `json:"dataDeposit"`
 }
 
-func FromDomainTrans(domain transaction.DomainTransaction) Transaction {
+func FromDomainTrans(domain transactions.DomainTransaction) Transaction {
 	if domain.TypeID == 1 {
 		//fmt.Println(domain.DepositData[0])
 		return Transaction{
@@ -66,7 +66,7 @@ type TypeTransaction struct {
 	Name string `json:"name"`
 }
 
-func FromDomainType(domain transaction.DomainType) TypeTransaction {
+func FromDomainType(domain transactions.DomainType) TypeTransaction {
 	return TypeTransaction{
 		ID:   domain.ID,
 		Name: domain.Name,

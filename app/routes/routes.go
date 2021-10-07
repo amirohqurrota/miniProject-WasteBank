@@ -7,6 +7,7 @@ import (
 	"wastebank-ca/app/presenter/waste"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 type HandlerList struct {
@@ -14,16 +15,19 @@ type HandlerList struct {
 	AdminHandler       admin.Presenter
 	WasteHandler       waste.Presenter
 	TransactionHandler transaction.Presenter
+	JWTMiddleware      middleware.JWTConfig
 }
 
 func (handler *HandlerList) RouteRegister(e *echo.Echo) {
-	users := e.Group("users")
+	users := e.Group("user")
 	users.POST("/register", handler.UserHandler.Insert)
+	users.GET("/login", handler.UserHandler.CreateToken)
 	users.PUT("/update", handler.UserHandler.Update)
-	users.GET("/getBy", handler.UserHandler.GetData)
+	users.GET("/getBy", handler.UserHandler.GetData, middleware.JWTWithConfig(handler.JWTMiddleware))
 
 	admin := e.Group("admin")
 	admin.POST("/register", handler.AdminHandler.Insert)
+	//users.GET("/login", handler.AdminHandler.CreateToken)
 	admin.PUT("/update", handler.AdminHandler.Update)
 	admin.GET("/getBy", handler.AdminHandler.GetData)
 
