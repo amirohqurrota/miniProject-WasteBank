@@ -22,6 +22,16 @@ type Transaction struct {
 	DataDeposit []WasteDeposit `json:"dataDeposit"`
 }
 
+type NewsAPI struct {
+	Title string `json:"title"`
+	Text  string `json:"text"`
+	Link  string `json:"link"`
+}
+type TransactionAddNew struct {
+	TransactionData Transaction
+	News            NewsAPI
+}
+
 type TypeTransaction struct {
 	//ID   int    `json:"id"`
 	Name string `json:"name"`

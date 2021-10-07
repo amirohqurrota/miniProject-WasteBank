@@ -36,8 +36,8 @@ func toDomain(rec User) users.Domain {
 
 func fromDomain(domain users.Domain) User {
 	return User{
-		Username:   domain.Username,
-		Password:   domain.Password,
+		Username: domain.Username,
+		//Password:   domain.Password,
 		FirstName:  domain.FirstName,
 		LastName:   domain.LastName,
 		Telephone:  domain.Telephone,

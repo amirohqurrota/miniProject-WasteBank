@@ -1,8 +1,8 @@
 package transactions
 
 import (
-	"fmt"
 	_adminDomain "wastebank-ca/bussines/admin"
+	_newsDomain "wastebank-ca/bussines/newsApi"
 	_userDomain "wastebank-ca/bussines/users"
 )
 
@@ -10,18 +10,19 @@ type serviceTransaction struct {
 	repository  Repository
 	userDomain  _userDomain.Service
 	adminDomain _adminDomain.Service
+	newsDomain  _newsDomain.Repository
 }
 
-func NewService(repoTransaction Repository, adminService _adminDomain.Service, userService _userDomain.Service) Service {
+func NewService(repoTransaction Repository, adminService _adminDomain.Service, userService _userDomain.Service, newsRepository _newsDomain.Repository) Service {
 	return &serviceTransaction{
 		repository:  repoTransaction,
 		userDomain:  userService,
 		adminDomain: adminService,
+		newsDomain:  newsRepository,
 	}
 }
 
-func (servTransaction serviceTransaction) Append(transaction *DomainTransaction) (*DomainTransaction, error) {
-	//fmt.Println("service id", transaction.UserID)
+func (servTransaction serviceTransaction) Append(transaction *DomainTransaction) (*DomainTransaction, *_newsDomain.Domain, error) {
 	//update total saldo user
 	if transaction.TypeID == 2 {
 		transaction.TotalMoney = -transaction.TotalMoney
@@ -30,19 +31,24 @@ func (servTransaction serviceTransaction) Append(transaction *DomainTransaction)
 	_, updateError := servTransaction.userDomain.UpdateSaldo(transaction.UserID, transaction.TotalMoney)
 	if updateError != nil {
 		if updateError != nil {
-			return &DomainTransaction{}, updateError
+			return &DomainTransaction{}, &_newsDomain.Domain{}, updateError
 		}
 	}
-	//fmt.Println("service update aman")
-	result, err := servTransaction.repository.Insert(transaction)
+	//get News
+	resultNews, err := servTransaction.newsDomain.GetNews()
 	if err != nil {
-		return &DomainTransaction{}, err
+		return &DomainTransaction{}, &_newsDomain.Domain{}, err
 	}
-	return result, nil
+
+	resultTrans, err := servTransaction.repository.Insert(transaction)
+	if err != nil {
+		return &DomainTransaction{}, &_newsDomain.Domain{}, err
+	}
+	return resultTrans, &resultNews, nil
 }
 
 func (servTransaction serviceTransaction) AddNewType(typeTransaction *DomainType) (*DomainType, error) {
-	fmt.Println("in service")
+	//fmt.Println("in service")
 	result, err := servTransaction.repository.AddNewType(typeTransaction)
 	if err != nil {
 		return &DomainType{}, err

@@ -23,6 +23,8 @@ import (
 	"time"
 	_middleware "wastebank-ca/app/middleware"
 
+	repoNewsApi "wastebank-ca/repository/newsApi"
+
 	"github.com/labstack/echo/v4"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -74,8 +76,10 @@ func main() {
 	wasteServ := waste.NewService(wasteRepo)
 	wasteHandler := handlerWaste.NewHandler(wasteServ)
 
+	newsApiRepo := repoNewsApi.NewNewsApi()
+
 	transactionRepo := repoTransaction.NewRepoMySQL(db)
-	transactionServ := transactions.NewService(transactionRepo, adminServ, usersServ)
+	transactionServ := transactions.NewService(transactionRepo, adminServ, usersServ, newsApiRepo)
 	transactionHandler := handlerTransaction.NewHandler(transactionServ)
 
 	// initial of routes

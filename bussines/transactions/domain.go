@@ -2,6 +2,7 @@ package transactions
 
 import (
 	"time"
+	_newsDomain "wastebank-ca/bussines/newsApi"
 )
 
 type DomainDeposit struct {
@@ -26,7 +27,7 @@ type DomainTransaction struct {
 }
 
 type Service interface {
-	Append(transaction *DomainTransaction) (*DomainTransaction, error)
+	Append(transaction *DomainTransaction) (*DomainTransaction, *_newsDomain.Domain, error)
 	AddNewType(typeTransaction *DomainType) (*DomainType, error)
 	//NewDeposit(deposit *DomainDeposit) (*DomainDeposit, error)
 	//Update(transaction *DomainTransaction) (*DomainTransaction, error)

@@ -28,11 +28,11 @@ func (handler *Presenter) Insert(echoContext echo.Context) error {
 
 	domain := request.ToDomainTransaction(req)
 	fmt.Println(domain.AdminID, "handler")
-	resp, err := handler.serviceTransaction.Append(domain)
+	resp, respNews, err := handler.serviceTransaction.Append(domain)
 	if err != nil {
 		return echoContext.JSON(http.StatusInternalServerError, "something wrong")
 	}
-	return echoContext.JSON(http.StatusOK, response.FromDomainTrans(*resp))
+	return echoContext.JSON(http.StatusOK, response.FromDomainNewTrans(*resp, *respNews))
 }
 
 func (handler *Presenter) AddNewType(echoContext echo.Context) error {

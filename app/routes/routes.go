@@ -22,7 +22,7 @@ func (handler *HandlerList) RouteRegister(e *echo.Echo) {
 	users := e.Group("user")
 	users.POST("/register", handler.UserHandler.Insert)
 	users.GET("/login", handler.UserHandler.CreateToken)
-	users.PUT("/update", handler.UserHandler.Update)
+	users.PUT("/update", handler.UserHandler.Update, middleware.JWTWithConfig(handler.JWTMiddleware))
 	users.GET("/getBy", handler.UserHandler.GetData, middleware.JWTWithConfig(handler.JWTMiddleware))
 
 	admin := e.Group("admin")

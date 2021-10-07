@@ -2,7 +2,6 @@ package users
 
 import (
 	"errors"
-	"fmt"
 	"strings"
 	"time"
 	"wastebank-ca/app/middleware"
@@ -24,29 +23,21 @@ func NewService(repoUser Repository, jwtauth *middleware.ConfigJWT, timeout time
 }
 
 func (servUser serviceUser) CreateToken(username, password string) (string, error) {
-	// _, cancel := context.WithTimeout(ctx, servUser.contextTimeout)
-	// defer cancel()
-
 	if strings.TrimSpace(username) == "" && strings.TrimSpace(password) == "" {
 		return "", errors.New("please fill username and password")
 	}
-
 	userDomain, err := servUser.GetData(0, "", "", username)
 	if err != nil {
 		return "", err
 	}
-
 	if !encrypt.ValidateHash(password, userDomain.Password) {
 		return "", errors.New("invalid password")
 	}
-
 	token := servUser.jwtAuth.GenerateToken(userDomain.ID, "user")
 	return token, nil
 }
 
 func (servUser serviceUser) Append(user *Domain) (*Domain, error) {
-	//response,err:=servUser.Append()
-	//fmt.Println(user.Username)
 	result, err := servUser.repository.Insert(user)
 	if err != nil {
 		return &Domain{}, err
@@ -55,7 +46,6 @@ func (servUser serviceUser) Append(user *Domain) (*Domain, error) {
 }
 
 func (servUser *serviceUser) Update(user *Domain) (*Domain, error) {
-	//fmt.Println("id service", user.ID)
 	result, err := servUser.repository.Update(user)
 	if err != nil {
 		return &Domain{}, err
@@ -64,7 +54,6 @@ func (servUser *serviceUser) Update(user *Domain) (*Domain, error) {
 }
 
 func (servUser *serviceUser) UpdateSaldo(id int, saldo int) (*Domain, error) {
-	fmt.Println("update service")
 	result, err := servUser.repository.UpdateSaldo(id, saldo)
 	if err != nil {
 		return &Domain{}, err

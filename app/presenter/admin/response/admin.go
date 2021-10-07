@@ -5,9 +5,9 @@ import (
 )
 
 type Admin struct {
-	ID         int    `json:"id"`
-	Username   string `json:"username"`
-	Password   string `json:"password"`
+	ID       int    `json:"id"`
+	Username string `json:"username"`
+	//Password   string `json:"password"`
 	FirstName  string `json:"firstName"`
 	LastName   string `json:"lastName"`
 	Telephone  string `json:"telephone"`
@@ -17,9 +17,9 @@ type Admin struct {
 
 func FromDomain(domain admin.Domain) Admin {
 	return Admin{
-		ID:         domain.ID,
-		Username:   domain.Username,
-		Password:   domain.Password,
+		ID:       domain.ID,
+		Username: domain.Username,
+		//Password:   domain.Password,
 		FirstName:  domain.FirstName,
 		LastName:   domain.LastName,
 		Telephone:  domain.Telephone,
