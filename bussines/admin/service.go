@@ -3,7 +3,6 @@ package admin
 import (
 	"errors"
 	"fmt"
-	"strings"
 	"time"
 	"wastebank-ca/app/middleware"
 	"wastebank-ca/helper/encrypt"
@@ -27,9 +26,9 @@ func (servAdmin serviceAdmin) CreateToken(username, password string) (string, er
 	// _, cancel := context.WithTimeout(ctx, servAdmin.contextTimeout)
 	// defer cancel()
 
-	if strings.TrimSpace(username) == "" && strings.TrimSpace(password) == "" {
-		return "", errors.New("please fill username and password")
-	}
+	// if strings.TrimSpace(username) == "" && strings.TrimSpace(password) == "" {
+	// 	return "", errors.New("please fill username and password")
+	// }
 
 	adminDomain, err := servAdmin.GetData(0, "", "", username)
 	if err != nil {

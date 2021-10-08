@@ -62,7 +62,6 @@ func (servUser *serviceUser) UpdateSaldo(id int, saldo int) (*Domain, error) {
 }
 
 func (servUser *serviceUser) GetData(id int, firstName string, lastName string, username string) (*Domain, error) {
-	//fmt.Println("id service", id)
 	result, err := servUser.repository.GetData(id, firstName, lastName, username)
 	if err != nil {
 		return &Domain{}, err
