@@ -59,6 +59,15 @@ func (servAdmin *serviceAdmin) Update(admin *Domain) (*Domain, error) {
 	}
 	return result, nil
 }
+
+func (servUser *serviceAdmin) UpdateSaldo(id int, saldo int) (*Domain, error) {
+	result, err := servUser.repository.UpdateSaldo(id, saldo)
+	if err != nil {
+		return &Domain{}, err
+	}
+	return result, nil
+}
+
 func (servAdmin *serviceAdmin) GetData(id int, firstName string, lastName string, username string) (*Domain, error) {
 	fmt.Println("id service", id)
 	result, err := servAdmin.repository.GetData(id, firstName, lastName, username)

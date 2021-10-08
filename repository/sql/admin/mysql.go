@@ -17,6 +17,21 @@ func NewRepoMySQL(db *gorm.DB) _adminDomain.Repository {
 	}
 }
 
+func (repo *repoAdmin) UpdateSaldo(id int, saldo int) (*_adminDomain.Domain, error) {
+	var adminUpdateData Admin
+	bonusPercentage := float32(0.1)
+	if errFind := repo.DBConn.Where("id=?", id).First(&adminUpdateData).Error; errFind != nil {
+		return &_adminDomain.Domain{}, errFind
+	}
+	adminUpdateData.TotalBonus += int(bonusPercentage * float32(saldo)
+	if err := repo.DBConn.Table("users").Where("ID=?", id).Updates(adminUpdateData).Error; err != nil {
+		return &_adminDomain.Domain{}, err
+	}
+
+	result := toDomain(adminUpdateData)
+	return &result, nil
+}
+
 func (repo *repoAdmin) Insert(admin *_adminDomain.Domain) (*_adminDomain.Domain, error) {
 	recordUser := fromDomain(*admin)
 	if err := repo.DBConn.Save(&recordUser).Error; err != nil {
