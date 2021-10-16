@@ -51,5 +51,6 @@ func TestUpdate(t *testing.T) {
 		result, err := userRepository.Update(&userDomain)
 		assert.Nil(t, err)
 		assert.Contains(t, "nama", result.Username)
+
 	})
 }

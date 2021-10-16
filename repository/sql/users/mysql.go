@@ -23,10 +23,10 @@ func Hashpassword(password string) (string, error) {
 	return string(bytes), err
 }
 
-func CheckPasswordHash(password, hash string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
-	return err == nil
-}
+// func CheckPasswordHash(password, hash string) bool {
+// 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+// 	return err == nil
+// }
 
 func (repo *repoUser) Insert(user *users.Domain) (*users.Domain, error) {
 	user.Password, _ = Hashpassword(user.Password)
@@ -54,16 +54,13 @@ func (repo *repoUser) Update(user *users.Domain) (*users.Domain, error) {
 }
 
 func (repo *repoUser) UpdateSaldo(id int, saldo int) (*users.Domain, error) {
-	//recordUser := fromDomain(*user)
-	fmt.Println("id mysql ", id)
 	var userUpdateData User
 	if errFind := repo.DBConn.Where("id=?", id).First(&userUpdateData).Error; errFind != nil {
 		fmt.Println("error find mysql ")
 		return &users.Domain{}, errFind
 	}
-	fmt.Println("error find mysql passed ")
+	//fmt.Println("error find mysql passed ")
 	userUpdateData.TotalSaldo += saldo
-	//fmt.Println("id mysql ", user.ID)
 	if err := repo.DBConn.Table("users").Where("ID=?", id).Updates(userUpdateData).Error; err != nil {
 		fmt.Println("error update mysql ")
 		return &users.Domain{}, err

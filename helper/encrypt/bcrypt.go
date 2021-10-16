@@ -11,8 +11,6 @@ func Hash(secret string) string {
 
 func ValidateHash(secret, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(secret))
-	//fmt.Println(Hash(secret), "banding", string(hash))
-	//return Hash(secret) == hash
 	return err == nil
 
 }

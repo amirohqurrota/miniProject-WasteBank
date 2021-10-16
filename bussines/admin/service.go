@@ -2,7 +2,7 @@ package admin
 
 import (
 	"errors"
-	"fmt"
+	"strings"
 	"time"
 	"wastebank-ca/app/middleware"
 	"wastebank-ca/helper/encrypt"
@@ -26,9 +26,9 @@ func (servAdmin serviceAdmin) CreateToken(username, password string) (string, er
 	// _, cancel := context.WithTimeout(ctx, servAdmin.contextTimeout)
 	// defer cancel()
 
-	// if strings.TrimSpace(username) == "" && strings.TrimSpace(password) == "" {
-	// 	return "", errors.New("please fill username and password")
-	// }
+	if strings.TrimSpace(username) == "" && strings.TrimSpace(password) == "" {
+		return "", errors.New("please fill username and password")
+	}
 
 	adminDomain, err := servAdmin.GetData(0, "", "", username)
 	if err != nil {
@@ -44,6 +44,8 @@ func (servAdmin serviceAdmin) CreateToken(username, password string) (string, er
 }
 
 func (servAdmin serviceAdmin) Append(admin *Domain) (*Domain, error) {
+	passwordHashed := encrypt.Hash(admin.Password)
+	admin.Password = passwordHashed
 	result, err := servAdmin.repository.Insert(admin)
 	if err != nil {
 		return &Domain{}, err
@@ -52,15 +54,23 @@ func (servAdmin serviceAdmin) Append(admin *Domain) (*Domain, error) {
 }
 
 func (servAdmin *serviceAdmin) Update(admin *Domain) (*Domain, error) {
-	//fmt.Println("id service", admin.ID)
 	result, err := servAdmin.repository.Update(admin)
 	if err != nil {
 		return &Domain{}, err
 	}
 	return result, nil
 }
+
+func (servUser *serviceAdmin) UpdateBonus(id int, saldo int) (*Domain, error) {
+	result, err := servUser.repository.UpdateBonus(id, saldo)
+	if err != nil {
+		return &Domain{}, err
+	}
+	return result, nil
+}
+
 func (servAdmin *serviceAdmin) GetData(id int, firstName string, lastName string, username string) (*Domain, error) {
-	fmt.Println("id service", id)
+
 	result, err := servAdmin.repository.GetData(id, firstName, lastName, username)
 	if err != nil {
 		return &Domain{}, err

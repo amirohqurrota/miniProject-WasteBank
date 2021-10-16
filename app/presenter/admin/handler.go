@@ -29,6 +29,7 @@ func (handler *Presenter) CreateToken(echoContext echo.Context) error {
 	}
 	username := req.Username
 	password := req.Password
+	fmt.Println(username, " ", password)
 	token, err := handler.serviceAdmin.CreateToken(username, password)
 	if err != nil {
 		return err

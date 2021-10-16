@@ -27,13 +27,21 @@ func (servTransaction serviceTransaction) Append(transaction *DomainTransaction)
 	if transaction.TypeID == 2 {
 		transaction.TotalMoney = -transaction.TotalMoney
 	}
-
-	_, updateError := servTransaction.userDomain.UpdateSaldo(transaction.UserID, transaction.TotalMoney)
-	if updateError != nil {
-		if updateError != nil {
-			return &DomainTransaction{}, &_newsDomain.Domain{}, updateError
+	_, updateUserError := servTransaction.userDomain.UpdateSaldo(transaction.UserID, transaction.TotalMoney)
+	if updateUserError != nil {
+		if updateUserError != nil {
+			return &DomainTransaction{}, &_newsDomain.Domain{}, updateUserError
 		}
 	}
+
+	//update total bonus admin
+	// _, updateAdminError := servTransaction.adminDomain.UpdateBonus(transaction.UserID, transaction.TotalMoney)
+	// if updateAdminError != nil {
+	// 	if updateAdminError != nil {
+	// 		return &DomainTransaction{}, &_newsDomain.Domain{}, updateAdminError
+	// 	}
+	// }
+
 	//get News
 	resultNews, err := servTransaction.newsDomain.GetNews()
 	if err != nil {

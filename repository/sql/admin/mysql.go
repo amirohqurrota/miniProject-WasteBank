@@ -1,7 +1,6 @@
 package admin
 
 import (
-	"fmt"
 	_adminDomain "wastebank-ca/bussines/admin"
 
 	"gorm.io/gorm"
@@ -38,9 +37,24 @@ func (repo *repoAdmin) Update(admin *_adminDomain.Domain) (*_adminDomain.Domain,
 	result := toDomain(resultResponse)
 	return &result, nil
 }
+
+func (repo *repoAdmin) UpdateBonus(id int, total int) (*_adminDomain.Domain, error) {
+	var adminUpdateData Admin
+	percentageBonus := float32(0.1)
+	if errFind := repo.DBConn.Where("id=?", id).First(&adminUpdateData).Error; errFind != nil {
+		return &_adminDomain.Domain{}, errFind
+	}
+	adminUpdateData.TotalBonus += int(float32(total) * percentageBonus)
+	if err := repo.DBConn.Table("users").Where("ID=?", id).Updates(adminUpdateData).Error; err != nil {
+		return &_adminDomain.Domain{}, err
+	}
+
+	result := toDomain(adminUpdateData)
+	return &result, nil
+}
+
 func (repo *repoAdmin) GetData(id int, firstName string, lastName string, username string) (*_adminDomain.Domain, error) {
 	var recordAdmin Admin
-	fmt.Println("id mysql ", id)
 	if err := repo.DBConn.Where("id=? OR first_name=? OR last_name=? OR username=?", id, firstName, lastName, username).First(&recordAdmin).Error; err != nil {
 		return &_adminDomain.Domain{}, err
 	}

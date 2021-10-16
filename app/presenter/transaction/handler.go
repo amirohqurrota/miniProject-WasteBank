@@ -1,7 +1,6 @@
 package transaction
 
 import (
-	"fmt"
 	"net/http"
 	"wastebank-ca/app/presenter/transaction/request"
 	"wastebank-ca/app/presenter/transaction/response"
@@ -27,7 +26,7 @@ func (handler *Presenter) Insert(echoContext echo.Context) error {
 	}
 
 	domain := request.ToDomainTransaction(req)
-	fmt.Println(domain.AdminID, "handler")
+	//fmt.Println(domain.AdminID, "handler")
 	resp, respNews, err := handler.serviceTransaction.Append(domain)
 	if err != nil {
 		return echoContext.JSON(http.StatusInternalServerError, "something wrong")

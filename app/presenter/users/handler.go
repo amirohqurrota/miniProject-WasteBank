@@ -76,12 +76,17 @@ func (handler *Presenter) GetData(echoContext echo.Context) error {
 	username := echoContext.QueryParam("username")
 	id, _ := strconv.Atoi(echoContext.QueryParam("id"))
 
-	// a := echoContext.Request().Header
-	// tokenString := a["Authorization"]
-	// fmt.Println(tokenString[0], "==")
+	// token := echoContext.Get("admin").(*jwt.Token).Raw
+	// if middleware.RoleValidation(token, "admin") {
+	// 	resp, err := handler.serviceUser.GetData(id, firstName, lastName, username)
+	// 	if err != nil {
+	// 		return echoContext.JSON(http.StatusBadRequest, "not found")
+	// 	}
+	// 	return echoContext.JSON(http.StatusOK, resp)
+	// }
+	// return errors.New("forbidden role")
 
 	resp, err := handler.serviceUser.GetData(id, firstName, lastName, username)
-	fmt.Println("handler user ", id)
 	if err != nil {
 		return echoContext.JSON(http.StatusBadRequest, "not found")
 	}
