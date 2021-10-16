@@ -44,6 +44,8 @@ func (servAdmin serviceAdmin) CreateToken(username, password string) (string, er
 }
 
 func (servAdmin serviceAdmin) Append(admin *Domain) (*Domain, error) {
+	passwordHashed := encrypt.Hash(admin.Password)
+	admin.Password = passwordHashed
 	result, err := servAdmin.repository.Insert(admin)
 	if err != nil {
 		return &Domain{}, err
