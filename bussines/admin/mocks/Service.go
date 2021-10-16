@@ -103,13 +103,13 @@ func (_m *Service) Update(_a0 *admin.Domain) (*admin.Domain, error) {
 	return r0, r1
 }
 
-// UpdateSaldo provides a mock function with given fields: id, saldo
-func (_m *Service) UpdateSaldo(id int, saldo int) (*admin.Domain, error) {
-	ret := _m.Called(id, saldo)
+// UpdateBonus provides a mock function with given fields: id, bonus
+func (_m *Service) UpdateBonus(id int, bonus int) (*admin.Domain, error) {
+	ret := _m.Called(id, bonus)
 
 	var r0 *admin.Domain
 	if rf, ok := ret.Get(0).(func(int, int) *admin.Domain); ok {
-		r0 = rf(id, saldo)
+		r0 = rf(id, bonus)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*admin.Domain)
@@ -118,7 +118,7 @@ func (_m *Service) UpdateSaldo(id int, saldo int) (*admin.Domain, error) {
 
 	var r1 error
 	if rf, ok := ret.Get(1).(func(int, int) error); ok {
-		r1 = rf(id, saldo)
+		r1 = rf(id, bonus)
 	} else {
 		r1 = ret.Error(1)
 	}
