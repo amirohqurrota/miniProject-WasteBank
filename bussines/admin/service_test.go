@@ -118,17 +118,17 @@ func TestUpdate(t *testing.T) {
 	})
 }
 
-func TestUpdateSaldo(t *testing.T) {
-	t.Run("UpdateSaldo | Valid", func(t *testing.T) {
-		adminRepository.On("UpdateSaldo", mock.AnythingOfType("int"), mock.AnythingOfType("int")).Return(&adminDomainTest, nil).Once()
+func TestUpdateBonus(t *testing.T) {
+	t.Run("UpdateBonus | Valid", func(t *testing.T) {
+		adminRepository.On("UpdateBonus", mock.AnythingOfType("int"), mock.AnythingOfType("int")).Return(&adminDomainTest, nil).Once()
 
 		result, err := adminService.UpdateBonus(1, 25000)
 		assert.Nil(t, err)
 		assert.NotEmpty(t, result)
 	})
 
-	t.Run("UpdateSaldo | Invalid", func(t *testing.T) {
-		adminRepository.On("UpdateSaldo", mock.AnythingOfType("int"), mock.AnythingOfType("int")).Return(&adminDomainTest, assert.AnError).Once()
+	t.Run("UpdateBonus | Invalid", func(t *testing.T) {
+		adminRepository.On("UpdateBonus", mock.AnythingOfType("int"), mock.AnythingOfType("int")).Return(&adminDomainTest, assert.AnError).Once()
 
 		result, err := adminService.UpdateBonus(8, 25000)
 		assert.NotNil(t, err)

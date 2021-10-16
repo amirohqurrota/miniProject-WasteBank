@@ -94,6 +94,18 @@ func TestAppend(t *testing.T) {
 		assert.NotEmpty(t, result, news)
 	})
 
+	t.Run("Append | InvalidUpdateSaldo", func(t *testing.T) {
+
+		userService.On("UpdateSaldo", mock.AnythingOfType("int"), mock.AnythingOfType("int")).Return(nil, assert.AnError).Once()
+		//newApiRepository.On("GetNews").Return(newsDomain, nil).Once()
+		//transRepository.On("Insert", mock.Anything).Return(&transDomain, nil).Once()
+		//newApiRepository.On()
+		result, news, err := transService.Append(&transDomain)
+
+		assert.NotNil(t, err)
+		assert.Empty(t, result, news)
+	})
+
 }
 
 func TestAddNewType(t *testing.T) {
