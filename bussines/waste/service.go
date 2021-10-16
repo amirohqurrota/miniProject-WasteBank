@@ -1,7 +1,5 @@
 package waste
 
-import "fmt"
-
 type serviceWaste struct {
 	repository Repository
 }
@@ -22,7 +20,7 @@ func (servWaste serviceWaste) Append(waste *DomainWaste) (*DomainWaste, error) {
 }
 
 func (servWaste *serviceWaste) Update(waste *DomainWaste) (*DomainWaste, error) {
-	fmt.Println("id serviec", waste.ID)
+	//fmt.Println("id serviec", waste.ID)
 	result, err := servWaste.repository.Update(waste)
 	if err != nil {
 		return &DomainWaste{}, err

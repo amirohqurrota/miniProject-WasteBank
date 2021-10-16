@@ -70,7 +70,6 @@ func (servUser *serviceAdmin) UpdateBonus(id int, saldo int) (*Domain, error) {
 }
 
 func (servAdmin *serviceAdmin) GetData(id int, firstName string, lastName string, username string) (*Domain, error) {
-
 	result, err := servAdmin.repository.GetData(id, firstName, lastName, username)
 	if err != nil {
 		return &Domain{}, err
