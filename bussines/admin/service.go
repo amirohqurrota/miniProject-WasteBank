@@ -2,7 +2,6 @@ package admin
 
 import (
 	"errors"
-	"fmt"
 	"time"
 	"wastebank-ca/app/middleware"
 	"wastebank-ca/helper/encrypt"
@@ -71,7 +70,6 @@ func (servUser *serviceAdmin) UpdateSaldo(id int, saldo int) (*Domain, error) {
 }
 
 func (servAdmin *serviceAdmin) GetData(id int, firstName string, lastName string, username string) (*Domain, error) {
-	fmt.Println("id service", id)
 	result, err := servAdmin.repository.GetData(id, firstName, lastName, username)
 	if err != nil {
 		return &Domain{}, err

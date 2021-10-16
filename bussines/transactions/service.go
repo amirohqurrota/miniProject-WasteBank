@@ -30,9 +30,7 @@ func (servTransaction serviceTransaction) Append(transaction *DomainTransaction)
 
 	_, updateError := servTransaction.userDomain.UpdateSaldo(transaction.UserID, transaction.TotalMoney)
 	if updateError != nil {
-		if updateError != nil {
-			return &DomainTransaction{}, &_newsDomain.Domain{}, updateError
-		}
+		return &DomainTransaction{}, &_newsDomain.Domain{}, updateError
 	}
 	//get News
 	resultNews, err := servTransaction.newsDomain.GetNews()
