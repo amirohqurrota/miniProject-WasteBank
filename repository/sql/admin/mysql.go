@@ -23,7 +23,7 @@ func (repo *repoAdmin) UpdateSaldo(id int, saldo int) (*_adminDomain.Domain, err
 	if errFind := repo.DBConn.Where("id=?", id).First(&adminUpdateData).Error; errFind != nil {
 		return &_adminDomain.Domain{}, errFind
 	}
-	adminUpdateData.TotalBonus += int(bonusPercentage * float32(saldo)
+	adminUpdateData.TotalBonus += int(bonusPercentage * float32(saldo))
 	if err := repo.DBConn.Table("users").Where("ID=?", id).Updates(adminUpdateData).Error; err != nil {
 		return &_adminDomain.Domain{}, err
 	}
