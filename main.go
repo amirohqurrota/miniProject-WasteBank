@@ -5,6 +5,7 @@ import (
 	//"wastebank-ca/app/routes"
 	handlerUsers "wastebank-ca/app/presenter/users"
 	routes "wastebank-ca/app/routes"
+	"wastebank-ca/bussines/transactions"
 	"wastebank-ca/bussines/users"
 	repoUsers "wastebank-ca/repository/sql/users"
 
@@ -17,8 +18,12 @@ import (
 	repoWaste "wastebank-ca/repository/sql/waste"
 
 	handlerTransaction "wastebank-ca/app/presenter/transaction"
-	"wastebank-ca/bussines/transaction"
-	repoTransaction "wastebank-ca/repository/sql/transaction"
+	repoTransaction "wastebank-ca/repository/sql/transactions"
+
+	"time"
+	_middleware "wastebank-ca/app/middleware"
+
+	repoNewsApi "wastebank-ca/repository/newsApi"
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/driver/mysql"
@@ -51,22 +56,30 @@ func initDB() *gorm.DB {
 func main() {
 	db := initDB()
 	e := echo.New()
+	configJWT := _middleware.ConfigJWT{
+		SecretJWT:       "secret!@#$%",
+		ExpiresDuration: 1,
+	}
+
+	timeoutContext := time.Duration(2 * time.Second)
 
 	// factory of domain
 	usersRepo := repoUsers.NewRepoMySQL(db)
-	usersServ := users.NewService(usersRepo)
+	usersServ := users.NewService(usersRepo, &configJWT, timeoutContext)
 	usersHandler := handlerUsers.NewHandler(usersServ)
 
 	adminRepo := repoAdmin.NewRepoMySQL(db)
-	adminServ := admin.NewService(adminRepo)
+	adminServ := admin.NewService(adminRepo, &configJWT, timeoutContext)
 	adminHandler := handlerAdmin.NewHandler(adminServ)
 
 	wasteRepo := repoWaste.NewRepoMySQL(db)
 	wasteServ := waste.NewService(wasteRepo)
 	wasteHandler := handlerWaste.NewHandler(wasteServ)
 
+	newsApiRepo := repoNewsApi.NewNewsApi()
+
 	transactionRepo := repoTransaction.NewRepoMySQL(db)
-	transactionServ := transaction.NewService(transactionRepo, adminServ, usersServ)
+	transactionServ := transactions.NewService(transactionRepo, adminServ, usersServ, newsApiRepo)
 	transactionHandler := handlerTransaction.NewHandler(transactionServ)
 
 	// initial of routes
@@ -75,6 +88,7 @@ func main() {
 		WasteHandler:       *wasteHandler,
 		TransactionHandler: *transactionHandler,
 		AdminHandler:       *adminHandler,
+		JWTMiddleware:      configJWT.Init(),
 	}
 
 	routesInit.RouteRegister(e)

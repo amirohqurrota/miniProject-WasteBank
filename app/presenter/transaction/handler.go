@@ -1,20 +1,19 @@
 package transaction
 
 import (
-	"fmt"
 	"net/http"
 	"wastebank-ca/app/presenter/transaction/request"
 	"wastebank-ca/app/presenter/transaction/response"
-	"wastebank-ca/bussines/transaction"
+	"wastebank-ca/bussines/transactions"
 
 	"github.com/labstack/echo/v4"
 )
 
 type Presenter struct {
-	serviceTransaction transaction.Service
+	serviceTransaction transactions.Service
 }
 
-func NewHandler(transactionServ transaction.Service) *Presenter {
+func NewHandler(transactionServ transactions.Service) *Presenter {
 	return &Presenter{
 		serviceTransaction: transactionServ,
 	}
@@ -27,12 +26,12 @@ func (handler *Presenter) Insert(echoContext echo.Context) error {
 	}
 
 	domain := request.ToDomainTransaction(req)
-	fmt.Println(domain.AdminID, "handler")
-	resp, err := handler.serviceTransaction.Append(domain)
+	//fmt.Println(domain.AdminID, "handler")
+	resp, respNews, err := handler.serviceTransaction.Append(domain)
 	if err != nil {
 		return echoContext.JSON(http.StatusInternalServerError, "something wrong")
 	}
-	return echoContext.JSON(http.StatusOK, response.FromDomainTrans(*resp))
+	return echoContext.JSON(http.StatusOK, response.FromDomainNewTrans(*resp, *respNews))
 }
 
 func (handler *Presenter) AddNewType(echoContext echo.Context) error {
@@ -48,23 +47,6 @@ func (handler *Presenter) AddNewType(echoContext echo.Context) error {
 	return echoContext.JSON(http.StatusOK, response.FromDomainType(*resp))
 
 }
-
-// func (handler *Presenter) Update(echoContext echo.Context) error {
-
-// 	var req request.UpdateRequest
-// 	if err := echoContext.Bind(&req); err != nil {
-// 		return echoContext.JSON(http.StatusBadRequest, "something wrong")
-// 	}
-// 	fmt.Println("id handler", req.ID)
-// 	domain := request.UpdateToDomain(req)
-// 	fmt.Println("id handler", domain.ID)
-// 	resp, err := handler.serviceUser.Update(domain)
-// 	if err != nil {
-// 		return echoContext.JSON(http.StatusBadRequest, "something wrong")
-// 	}
-// 	return echoContext.JSON(http.StatusOK, response.FromDomain(*resp))
-
-// }
 
 // func (handler *Presenter) FindByID(echoContext echo.Context) error {
 // 	var req request.UserInsert

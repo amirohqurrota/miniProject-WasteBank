@@ -21,10 +21,27 @@ func NewHandler(userServ users.Service) *Presenter {
 	}
 }
 
+func (handler *Presenter) CreateToken(echoContext echo.Context) error {
+	var req users.Domain
+	if err := echoContext.Bind(&req); err != nil {
+		return echoContext.JSON(http.StatusBadRequest, "something wrong in your request")
+	}
+	username := req.Username
+	password := req.Password
+	token, err := handler.serviceUser.CreateToken(username, password)
+	if err != nil {
+		return err
+	}
+	//a, _ := auth.ParsingToken(token)
+	req.Username = username
+	return echoContext.JSON(http.StatusOK, response.FromDomainToken(token, req))
+}
+
 func (handler *Presenter) Insert(echoContext echo.Context) error {
 	var req request.UserInsert
 	if err := echoContext.Bind(&req); err != nil {
 		return echoContext.JSON(http.StatusBadRequest, "something wrong")
+
 	}
 
 	domain := request.ToDomain(req)
@@ -53,16 +70,23 @@ func (handler *Presenter) Update(echoContext echo.Context) error {
 }
 
 func (handler *Presenter) GetData(echoContext echo.Context) error {
-	//var req request.WasteInsert
-	// if err := echoContext.Bind(&req); err != nil {
-	// 	return echoContext.JSON(http.StatusBadRequest, "something wrong in your request")
-	// }
-	fmt.Println("handler user checking")
+	//fmt.Println("handler user checking")
 	firstName := echoContext.QueryParam("firstName")
+	lastName := echoContext.QueryParam("lastName")
+	username := echoContext.QueryParam("username")
 	id, _ := strconv.Atoi(echoContext.QueryParam("id"))
 
-	resp, err := handler.serviceUser.GetData(id, firstName)
-	fmt.Println("handler user ", id)
+	// token := echoContext.Get("admin").(*jwt.Token).Raw
+	// if middleware.RoleValidation(token, "admin") {
+	// 	resp, err := handler.serviceUser.GetData(id, firstName, lastName, username)
+	// 	if err != nil {
+	// 		return echoContext.JSON(http.StatusBadRequest, "not found")
+	// 	}
+	// 	return echoContext.JSON(http.StatusOK, resp)
+	// }
+	// return errors.New("forbidden role")
+
+	resp, err := handler.serviceUser.GetData(id, firstName, lastName, username)
 	if err != nil {
 		return echoContext.JSON(http.StatusBadRequest, "not found")
 	}

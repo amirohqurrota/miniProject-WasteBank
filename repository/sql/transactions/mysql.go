@@ -1,8 +1,7 @@
-package transaction
+package transactions
 
 import (
-	"fmt"
-	_TransactionDomain "wastebank-ca/bussines/transaction"
+	_TransactionDomain "wastebank-ca/bussines/transactions"
 
 	"gorm.io/gorm"
 )
@@ -23,7 +22,7 @@ func (repo *repoTransaction) NewDeposit(wasteDeposit *_TransactionDomain.DomainD
 	if err := repo.DBConn.Save(&recWasteDeposit).Error; err != nil {
 		return &_TransactionDomain.DomainDeposit{}, err
 	}
-	fmt.Println("sql new deposit aman")
+	//fmt.Println("sql new deposit aman")
 	result := ToDomainDeposit(&recWasteDeposit)
 	return &result, nil
 }
@@ -40,7 +39,7 @@ func (repo *repoTransaction) Insert(trans *_TransactionDomain.DomainTransaction)
 		}
 	}
 
-	fmt.Println("--", trans.DepositData[0].TotalHeight)
+	//fmt.Println("--", trans.DepositData[0].TotalHeight)
 	recordTransaction := fromDomainTrans(*trans)
 	//fmt.Println(recordTransaction.AdminID, "in repository")
 	if err := repo.DBConn.Save(&recordTransaction).Error; err != nil {

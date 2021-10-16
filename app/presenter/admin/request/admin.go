@@ -1,6 +1,5 @@
 package request
 
-
 import (
 	"time"
 	"wastebank-ca/bussines/admin"
@@ -8,6 +7,8 @@ import (
 
 type Admin struct {
 	ID         int    `json:"id"`
+	Username   string `json:"username"`
+	Password   string `json:"password"`
 	FirstName  string `json:"firstName"`
 	LastName   string `json:"lastName"`
 	Telephone  string `json:"telephone"`
@@ -18,6 +19,8 @@ type Admin struct {
 func ToDomain(request Admin) *admin.Domain {
 	return &admin.Domain{
 		ID:         request.ID,
+		Username:   request.Username,
+		Password:   request.Password,
 		FirstName:  request.FirstName,
 		LastName:   request.LastName,
 		Telephone:  request.Telephone,

@@ -1,9 +1,13 @@
 package users
 
-import "time"
+import (
+	"time"
+)
 
 type Domain struct {
 	ID         int
+	Username   string
+	Password   string
 	FirstName  string
 	LastName   string
 	Telephone  string
@@ -18,14 +22,13 @@ type Service interface {
 	Append(user *Domain) (*Domain, error)
 	Update(user *Domain) (*Domain, error)
 	UpdateSaldo(id int, saldo int) (*Domain, error)
-	//UpdateWaste(id int, waste int) (*Domain, error)
-	GetData(id int, name string) (*Domain, error)
+	CreateToken(username, password string) (string, error)
+	GetData(id int, firstName string, lastName string, username string) (*Domain, error)
 }
 
 type Repository interface {
 	Insert(user *Domain) (*Domain, error)
 	Update(user *Domain) (*Domain, error)
 	UpdateSaldo(id int, saldo int) (*Domain, error)
-	//UpdateWaste(id int, waste int) (*Domain, error)
-	GetData(id int, name string) (*Domain, error)
+	GetData(id int, firstName string, lastName string, username string) (*Domain, error)
 }

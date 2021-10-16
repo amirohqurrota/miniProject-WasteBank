@@ -8,6 +8,8 @@ import (
 
 type Admin struct {
 	gorm.Model
+	Username   string
+	Password   string
 	FirstName  string
 	LastName   string
 	Telephone  string
@@ -18,6 +20,8 @@ type Admin struct {
 func toDomain(rec Admin) admin.Domain {
 	return admin.Domain{
 		ID:         int(rec.ID),
+		Username:   rec.Username,
+		Password:   rec.Password,
 		FirstName:  rec.FirstName,
 		LastName:   rec.LastName,
 		Telephone:  rec.Telephone,
@@ -30,6 +34,8 @@ func toDomain(rec Admin) admin.Domain {
 
 func fromDomain(domain admin.Domain) Admin {
 	return Admin{
+		Username:   domain.Username,
+		Password:   domain.Password,
 		FirstName:  domain.FirstName,
 		LastName:   domain.LastName,
 		Telephone:  domain.Telephone,
