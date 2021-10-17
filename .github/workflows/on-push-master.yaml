@@ -12,7 +12,7 @@ on:
 
 jobs:
   api-test:
-    name: api test-run unitest on action
+    name: api test - run unitest on action
     runs-on: ubuntu-latest
     container: golang:1.17
     services:
@@ -26,12 +26,13 @@ jobs:
       matrix:
         go: [ '1.17' ]
     steps:
-      - uses: actions/checkout@v2
+      - name: "Git Checkout"
+        uses: actions/checkout@v2
       - name: create database
         run: |
           apt-get update
           apt-get install -y mariadb-client
-          MYSQL --host mysql -uroot -p22juli1998 "CREATE DATABASE IF NOT EXIST wastebank_miniproject"
+          mysql --host mysql -uroot -p22juli1998 -e "CREATE DATABASE IF NOT EXIST wastebank_miniproject"
       - name: running unitest
         run: |
           mv ./app/config/example-config.json ./app/config/config.json
