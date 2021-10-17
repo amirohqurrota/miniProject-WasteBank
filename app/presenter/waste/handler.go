@@ -1,7 +1,6 @@
 package waste
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 	"wastebank-ca/app/presenter/waste/request"
@@ -41,9 +40,7 @@ func (handler *Presenter) Update(echoContext echo.Context) error {
 	if err := echoContext.Bind(&req); err != nil {
 		return echoContext.JSON(http.StatusBadRequest, "something wrong")
 	}
-	//fmt.Println("id handler", req.ID)
 	domain := request.UpdateToDomain(req)
-	//fmt.Println("id handler", domain.ID)
 	resp, err := handler.serviceWaste.Update(domain)
 	if err != nil {
 		return echoContext.JSON(http.StatusBadRequest, "something wrong")
@@ -56,7 +53,7 @@ func (handler *Presenter) FindAll(echoContext echo.Context) error {
 	if err != nil {
 		return echoContext.JSON(http.StatusBadRequest, "user not found")
 	}
-	fmt.Println("array cond in presenter ", len(*resp))
+	//fmt.Println("array cond in presenter ", len(*resp))
 
 	wasteDomain := []response.Waste{}
 	for _, value := range *resp {
