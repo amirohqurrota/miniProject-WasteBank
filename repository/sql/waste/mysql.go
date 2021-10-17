@@ -29,7 +29,7 @@ func (repo *repoWaste) Insert(waste *_wasteDomain.DomainWaste) (*_wasteDomain.Do
 func (repo *repoWaste) Update(waste *_wasteDomain.DomainWaste) (*_wasteDomain.DomainWaste, error) {
 	recordWaste := fromDomain(*waste)
 	//fmt.Println("id sql 1", waste.ID)
-	if err := repo.DBConn.Where("Id=?", waste.ID).Updates(recordWaste).Error; err != nil {
+	if err := repo.DBConn.Where("id=?", waste.ID).Updates(recordWaste).Error; err != nil {
 		return &_wasteDomain.DomainWaste{}, err
 	}
 	//fmt.Println("id sql", recordWaste.ID)
