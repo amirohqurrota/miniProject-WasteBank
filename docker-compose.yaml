@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  wastebank:
+    build: .
+    restart: "no"
+    ports:
+      - 8005:8080
+  
+  mysql-wastebank:
+    image: mariadb:10.1
+    hostname: mysql.docker
+    environment:
+      MYSQL_ROOT_PASSWORD: 22juli1998
+    ports:
+      - 3336:3306
+    restart: "no"

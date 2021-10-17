@@ -31,8 +31,8 @@ import (
 )
 
 func initDB() *gorm.DB {
-	connectionString := "root:22juli1998@tcp(0.0.0.0:3306)/wastebank_miniproject?parseTime=True"
-
+	connectionString := "root:22juli1998@tcp(mysql-wastebank:3306)/wastebank_miniproject?parseTime=True"
+	//connectionString := "root:22juli1998@tcp(0.0.0.0:3306)/wastebank_miniproject?parseTime=True"
 	var err error
 	DB, err := gorm.Open(mysql.Open(connectionString), &gorm.Config{})
 

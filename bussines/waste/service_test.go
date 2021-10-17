@@ -11,13 +11,11 @@ import (
 )
 
 var (
-	//adminServ _adminMocks.Service
 	wasteService        waste.Service
 	wasteRepository     _wasteMocks.Repository
 	wasteDomain         waste.DomainWaste
 	wasteDomainCategory waste.DomainCategory
 	listOfWaste         []waste.DomainWaste
-	//userDomainUpdate    users.Domain
 )
 
 func TestMain(m *testing.M) {
