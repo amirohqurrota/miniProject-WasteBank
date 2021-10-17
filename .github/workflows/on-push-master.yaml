@@ -31,7 +31,7 @@ jobs:
         run: |
           apt-get update
           apt-get install -y mariadb-client
-          mysql --host mysql -uroot -p22juli1998 "CREATE DATABASE IF NOT EXIST wastebank_miniproject"
+          MYSQL --host mysql -uroot -p22juli1998 "CREATE DATABASE IF NOT EXIST wastebank_miniproject"
       - name: running unitest
         run: |
           mv ./app/config/example-config.json ./app/config/config.json
