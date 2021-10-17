@@ -42,7 +42,7 @@ func (repo *repoUser) Insert(user *users.Domain) (*users.Domain, error) {
 func (repo *repoUser) Update(user *users.Domain) (*users.Domain, error) {
 	recordUser := fromDomain(*user)
 	//fmt.Println("id mysql ", user.ID)
-	if err := repo.DBConn.Table("users").Where("ID=?", user.ID).Updates(recordUser).Error; err != nil {
+	if err := repo.DBConn.Table("users").Where("id=?", user.ID).Updates(recordUser).Error; err != nil {
 		return &users.Domain{}, err
 	}
 	var resultResponse User
